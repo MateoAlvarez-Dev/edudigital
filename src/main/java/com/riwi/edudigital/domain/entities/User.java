@@ -2,17 +2,16 @@ package com.riwi.edudigital.domain.entities;
 
 import java.util.List;
 
+import com.riwi.edudigital.util.enums.RoleType;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,13 +44,22 @@ public class User {
     private String full_name;
 
     @Enumerated(EnumType.STRING)
-    @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Role role;
-    
-    @ManyToMany(fetch = FetchType.LAZY)
-    @ToString.Exclude
+    @Column
+    private RoleType role;
+
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "instructor_id", orphanRemoval = false, cascade = CascadeType.ALL)
     private List<Course> courses;
-    
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "student_id", orphanRemoval = false, cascade = CascadeType.ALL)
+    private List<Enrollment> enrollments;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user_id", orphanRemoval = false, cascade = CascadeType.ALL)
+    private List<Submission> submissions;
+
 }
