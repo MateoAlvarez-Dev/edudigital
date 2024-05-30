@@ -1,0 +1,47 @@
+Las tablas usuario, enrollment y course son many to many, en este caso tenemos una entidad intermedia la cual es enrollment
+
+enrollment se encargara de unir el resto de tablas usando ManyToOne para cada una y cada una usara OneToMany para unirse con esta tabla intermedia
+
+----------------------------------------------
+
+USUARIO
+@EqualsAndHashCode.Exclude
+@ToString.Exclude
+@OneToMany(mappedBy = "student_id", orphanRemoval = false, cascade = CascadeType.ALL)
+private List<Enrollment> enrollments;
+
+hacemos referencia a la entidad que mapearemos con el mappedBy y como traeremos una lista organizamos una propiedad que es un listado de enrollments
+
+----------------------------------------------
+
+CURSO
+@EqualsAndHashCode.Exclude
+@ToString.Exclude
+@OneToMany(mappedBy = "course_id", orphanRemoval = false, cascade = CascadeType.ALL)
+private List<Enrollment> enrollments;
+
+hacemos referencia a la entidad que mapearemos con el mappedBy y como traeremos una lista organizamos una propiedad que es un listado de enrollments
+
+----------------------------------------------
+
+ENROLLMENT -> INTERMEDIA
+
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "student", referencedColumnName = "id")
+private User student_id;
+
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "course", referencedColumnName = "id")
+private Course course_id;
+
+Aqui crearemos las entidades que seran mapeadas usando ManyToOne y el uso de JoinColumn, name hara referencia a el nombre de la columna que 
+contendra el ID de la otra entidad.
+
+
+==============================================
+
+NOTAS:
+
+-MappedBy hace referencia a una propiedad que contendra la entidad que se va a mapear, esa propiedad esta ubicada en la entidad que hara el ManyToOne
+
+-ReferencedColumnName hace referencia a el campo o ID principal de la tabla que vamos a tomar en SQL

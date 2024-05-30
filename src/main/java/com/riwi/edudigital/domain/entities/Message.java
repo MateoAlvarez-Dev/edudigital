@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Message {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -36,7 +36,8 @@ public class Message {
     private Date date;
 
     @PrePersist
-    private void onCreate(){
+    private void onCreate() {
         date = new Date();
     }
+
 }
