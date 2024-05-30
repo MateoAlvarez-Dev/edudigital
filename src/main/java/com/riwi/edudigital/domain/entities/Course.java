@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -53,5 +52,10 @@ public class Course {
     @ToString.Exclude
     @OneToMany(mappedBy = "course_id", orphanRemoval = false, cascade = CascadeType.ALL)
     private List<Lesson> lessons;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "course_id", orphanRemoval = false, cascade = CascadeType.ALL)
+    private List<Message> messages;
 
 }
