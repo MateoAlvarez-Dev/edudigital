@@ -38,15 +38,15 @@ public class Course {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @OneToMany(mappedBy = "course_id", orphanRemoval = false, cascade = CascadeType.ALL)
-    private List<Enrollment> enrollments;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     @JoinColumn(name = "instructor", referencedColumnName = "id")
     private User instructor_id;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "course_id", orphanRemoval = false, cascade = CascadeType.ALL)
+    private List<Enrollment> enrollments;
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
