@@ -42,13 +42,13 @@ public class Assignment {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lession", referencedColumnName = "id")
+    private Lesson lesson_id;
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "assignment_id", orphanRemoval = false, cascade = CascadeType.ALL)
     private List<Submission> submissions;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lession", referencedColumnName = "id")
-    private Lesson lesson;
 
 }

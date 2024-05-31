@@ -14,43 +14,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.riwi.edudigital.api.dto.request.CourseRequest;
-import com.riwi.edudigital.api.dto.response.CourseResponse;
-import com.riwi.edudigital.infrastructure.abstract_services.ICourseService;
+import com.riwi.edudigital.api.dto.request.LessonRequest;
+import com.riwi.edudigital.api.dto.response.LessonResponse;
+import com.riwi.edudigital.infrastructure.abstract_services.ILessonService;
 
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/courses")
+@RequestMapping(path = "/lessons")
 @AllArgsConstructor
-public class CourseController {
+public class LessonController {
     @Autowired
-    private final ICourseService courseService;
+    private final ILessonService lessonService;
 
     @GetMapping
-    public ResponseEntity<Page<CourseResponse>> getAll(@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "size", defaultValue = "10") int size) {
+    public ResponseEntity<Page<LessonResponse>> getAll(@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "size", defaultValue = "10") int size) {
         page = page - 1;
-        return ResponseEntity.ok(this.courseService.getAll(page, size));
+        return ResponseEntity.ok(this.lessonService.getAll(page, size));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseResponse> getById(@PathVariable int id) {
-        return ResponseEntity.ok(this.courseService.getById(id));
+    public ResponseEntity<LessonResponse> getById(@PathVariable int id) {
+        return ResponseEntity.ok(this.lessonService.getById(id));
     }
 
     @PostMapping
-    public ResponseEntity<CourseResponse> create(@Validated @RequestBody CourseRequest request){
-        return ResponseEntity.ok(this.courseService.create(request));
+    public ResponseEntity<LessonResponse> create(@Validated @RequestBody LessonRequest request){
+        return ResponseEntity.ok(this.lessonService.create(request));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseResponse> update(@PathVariable int id, @Validated @RequestBody CourseRequest request) {
-        return ResponseEntity.ok(this.courseService.update(id, request));
+    public ResponseEntity<LessonResponse> update(@PathVariable int id, @Validated @RequestBody LessonRequest request) {
+        return ResponseEntity.ok(this.lessonService.update(id, request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id){
-        this.courseService.delete(id);
+        this.lessonService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

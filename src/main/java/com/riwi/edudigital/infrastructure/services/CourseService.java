@@ -69,11 +69,11 @@ public class CourseService implements ICourseService{
     
     // Utils
 
-    private Course findById(Integer id){
+    public Course findById(Integer id){
         return this.courseRepository.findById(id).orElseThrow();
     }
 
-    private CourseResponse entityToResponse(Course course){
+    public CourseResponse entityToResponse(Course course){
         CourseResponse response = CourseResponse.builder()
                                   .id(course.getId())
                                   .name(course.getName())
