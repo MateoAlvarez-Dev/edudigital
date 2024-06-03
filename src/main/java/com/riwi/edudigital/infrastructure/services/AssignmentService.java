@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import com.riwi.edudigital.api.dto.request.AssignmentRequest;
 import com.riwi.edudigital.api.dto.response.AssignmentResponse;
 import com.riwi.edudigital.domain.entities.Assignment;
-import com.riwi.edudigital.domain.entities.Lesson;
 import com.riwi.edudigital.domain.repositories.AssignmentRepository;
 import com.riwi.edudigital.infrastructure.abstract_services.IAssignmentService;
+import com.riwi.edudigital.util.mappers.AssignmentMapper;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class AssignmentService implements IAssignmentService{
+public class AssignmentService extends AssignmentMapper implements IAssignmentService{
 
     @Autowired
     private final AssignmentRepository assignmentRepository;
@@ -70,31 +70,5 @@ public class AssignmentService implements IAssignmentService{
 
     public Assignment findById(Integer id){
         return this.assignmentRepository.findById(id).orElseThrow();
-    }
-
-    public AssignmentResponse entityToResponse(Assignment assignment){
-        AssignmentResponse response = AssignmentResponse.builder()
-                                      .id(assignment.getId())
-                                      .title(assignment.getTitle())
-                                      .due_date(assignment.getDue_date())
-                                      .content(assignment.getContent())
-                                      .build();
-                                  
-        return response;
-    }
-    
-    private Assignment requestToEntity(AssignmentRequest request){
-        Lesson lesson = Lesson.builder()
-                                .id(request.getLession_id())
-                                .build();
-
-        Assignment assignment = Assignment.builder()
-                      .title(request.getTitle())
-                      .due_date(request.getDue_date())
-                      .content(request.getContent())
-                      .lesson_id(lesson)
-                      .build();
-
-        return assignment;
     }
 }

@@ -18,12 +18,10 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class MessageService implements IMessagesService{
+public class MessageService extends MessageMapper implements IMessagesService{
 
     @Autowired
     private final MessageRepository messageRepository;
-
-    private final MessageMapper messageMapper;
 
     @Override
     public Page<MessagesResponse> getAll(int page, int size) {
@@ -31,14 +29,14 @@ public class MessageService implements IMessagesService{
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.messageRepository.findAll(pagination).map(messageMapper::entityToResponse);
+        return this.messageRepository.findAll(pagination).map(this::entityToResponse);
     }
 
     @Override
     public MessagesResponse create(MessagesRequest request) {
-        Message messageToSave = messageMapper.requestToEntity(request);
+        Message messageToSave = this.requestToEntity(request);
         Message messageSaved = this.messageRepository.save(messageToSave);
-        MessagesResponse response = messageMapper.entityToResponse(messageSaved);
+        MessagesResponse response = this.entityToResponse(messageSaved);
         return response;
     }
 
@@ -46,13 +44,13 @@ public class MessageService implements IMessagesService{
     public MessagesResponse update(Integer id, MessagesRequest request) {
         this.findById(id);
 
-        Message messageToUpdate = messageMapper.requestToEntity(request);
+        Message messageToUpdate = this.requestToEntity(request);
 
         messageToUpdate.setId(id);
 
         this.messageRepository.save(messageToUpdate);
 
-        return messageMapper.entityToResponse(messageToUpdate);
+        return this.entityToResponse(messageToUpdate);
     }
 
     @Override
@@ -64,7 +62,7 @@ public class MessageService implements IMessagesService{
 
     @Override
     public MessagesResponse getById(Integer id) {
-        return messageMapper.entityToResponse(this.findById(id));
+        return this.entityToResponse(this.findById(id));
     }
     
     // Utils

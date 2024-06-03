@@ -14,20 +14,8 @@ import com.riwi.edudigital.domain.entities.Enrollment;
 import com.riwi.edudigital.domain.entities.Submission;
 import com.riwi.edudigital.domain.entities.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserMapper {
-
-    private CourseMapper courseMapper;
-    private EnrollmentMapper enrollmentMapper;
-    private SubmissionMapper submissionMapper;
 
     public UserResponse entityToResponse(User user){
         UserResponse response = UserResponse.builder()
@@ -55,25 +43,28 @@ public class UserMapper {
     }
 
     public List<CourseResponse> coursesToCourseResponses(List<Course> courses){
+        CourseMapper courseMapper = new CourseMapper();
         List<CourseResponse> courseResponses = new ArrayList<>();
         for(Course course : courses){
-            courseResponses.add(this.courseMapper.entityToResponse(course));
+            courseResponses.add(courseMapper.entityToResponse(course));
         }
         return courseResponses;
     }
     
     public List<EnrollmentResponse> enrollmentsToEnrollmentResponses(List<Enrollment> enrollments){
+        EnrollmentMapper enrollmentMapper = new EnrollmentMapper();
         List<EnrollmentResponse> enrollmentResponses = new ArrayList<>();
         for(Enrollment enrollment : enrollments){
-            enrollmentResponses.add(this.enrollmentMapper.entityToResponse(enrollment));
+            enrollmentResponses.add(enrollmentMapper.entityToResponse(enrollment));
         }
         return enrollmentResponses;
     }
 
     public List<SubmissionResponse> submissionsToSubmissionResponses(List<Submission> submissions){
+        SubmissionMapper submissionMapper = new SubmissionMapper();
         List<SubmissionResponse> submissionResponses = new ArrayList<>();
         for(Submission submission : submissions){
-            submissionResponses.add(this.submissionMapper.entityToResponse(submission));
+            submissionResponses.add(submissionMapper.entityToResponse(submission));
         }
         return submissionResponses;
     }

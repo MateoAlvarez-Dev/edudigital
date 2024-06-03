@@ -6,27 +6,17 @@ import com.riwi.edudigital.domain.entities.Assignment;
 import com.riwi.edudigital.domain.entities.Submission;
 import com.riwi.edudigital.domain.entities.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class SubmissionMapper {
 
-    private UserMapper userMapper;
-    private AssignmentMapper assignmentMapper;
-
     public SubmissionResponse entityToResponse(Submission submission){
+        UserMapper userMapper = new UserMapper();
+        AssignmentMapper assignmentMapper = new AssignmentMapper();
         SubmissionResponse response = SubmissionResponse.builder()
                                   .id(submission.getId())
                                   .content(submission.getContent())
                                   .grade(submission.getGrade())
-                                  .user(this.userMapper.entityToResponse(submission.getUser_id()))
-                                  .assignment(this.assignmentMapper.entityToResponse(submission.getAssignment_id()))
+                                  .user(userMapper.entityToResponse(submission.getUser_id()))
+                                  .assignment(assignmentMapper.entityToResponse(submission.getAssignment_id()))
                                   .build();
                                   
         return response;

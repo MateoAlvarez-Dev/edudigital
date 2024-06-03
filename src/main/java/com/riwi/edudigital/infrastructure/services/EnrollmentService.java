@@ -20,12 +20,10 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class EnrollmentService implements IEnrollmentService{
+public class EnrollmentService extends EnrollmentMapper implements IEnrollmentService{
 
     @Autowired
     private final EnrollmentRepository enrollmentRepository;
-
-    private final EnrollmentMapper enrollmentMapper;
 
     @Override
     public Page<EnrollmentResponse> getAll(int page, int size) {
@@ -33,14 +31,14 @@ public class EnrollmentService implements IEnrollmentService{
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.enrollmentRepository.findAll(pagination).map(enrollmentMapper::entityToResponse);
+        return this.enrollmentRepository.findAll(pagination).map(this::entityToResponse);
     }
 
     @Override
     public EnrollmentResponse create(EnrollmentRequest request) {
-        Enrollment enrollmentToSave = enrollmentMapper.requestToEntity(request);
+        Enrollment enrollmentToSave = this.requestToEntity(request);
         Enrollment enrollmentSaved = this.enrollmentRepository.save(enrollmentToSave);
-        EnrollmentResponse response = enrollmentMapper.entityToResponse(enrollmentSaved);
+        EnrollmentResponse response = this.entityToResponse(enrollmentSaved);
         return response;
     }
 
@@ -48,13 +46,13 @@ public class EnrollmentService implements IEnrollmentService{
     public EnrollmentResponse update(Integer id, EnrollmentRequest request) {
         this.findById(id);
 
-        Enrollment enrollmentToUpdate = enrollmentMapper.requestToEntity(request);
+        Enrollment enrollmentToUpdate = this.requestToEntity(request);
 
         enrollmentToUpdate.setId(id);
 
         this.enrollmentRepository.save(enrollmentToUpdate);
 
-        return enrollmentMapper.entityToResponse(enrollmentToUpdate);
+        return this.entityToResponse(enrollmentToUpdate);
     }
 
     @Override
@@ -66,7 +64,7 @@ public class EnrollmentService implements IEnrollmentService{
 
     @Override
     public EnrollmentResponse getById(Integer id) {
-        return enrollmentMapper.entityToResponse(this.findById(id));
+        return this.entityToResponse(this.findById(id));
     }
     
     // Utils

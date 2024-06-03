@@ -18,12 +18,10 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class CourseService implements ICourseService{
+public class CourseService extends CourseMapper implements ICourseService{
 
     @Autowired
     private final CourseRepository courseRepository;
-
-    private final CourseMapper courseMapper;
 
     @Override
     public Page<CourseResponse> getAll(int page, int size) {
@@ -31,14 +29,14 @@ public class CourseService implements ICourseService{
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.courseRepository.findAll(pagination).map(courseMapper::entityToResponse);
+        return this.courseRepository.findAll(pagination).map(this::entityToResponse);
     }
 
     @Override
     public CourseResponse create(CourseRequest request) {
-        Course courseToSave = courseMapper.requestToEntity(request);
+        Course courseToSave = this.requestToEntity(request);
         Course courseSaved = this.courseRepository.save(courseToSave);
-        CourseResponse response = courseMapper.entityToResponse(courseSaved);
+        CourseResponse response = this.entityToResponse(courseSaved);
         return response;
     }
 
@@ -46,13 +44,13 @@ public class CourseService implements ICourseService{
     public CourseResponse update(Integer id, CourseRequest request) {
         this.findById(id);
 
-        Course courseToUpdate = courseMapper.requestToEntity(request);
+        Course courseToUpdate = this.requestToEntity(request);
 
         courseToUpdate.setId(id);
 
         this.courseRepository.save(courseToUpdate);
 
-        return courseMapper.entityToResponse(courseToUpdate);
+        return this.entityToResponse(courseToUpdate);
     }
 
     @Override
@@ -64,7 +62,7 @@ public class CourseService implements ICourseService{
 
     @Override
     public CourseResponse getById(Integer id) {
-        return courseMapper.entityToResponse(this.findById(id));
+        return this.entityToResponse(this.findById(id));
     }
     
     // Utils

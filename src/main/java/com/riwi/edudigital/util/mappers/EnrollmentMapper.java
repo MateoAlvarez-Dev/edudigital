@@ -8,14 +8,13 @@ import com.riwi.edudigital.domain.entities.User;
 
 public class EnrollmentMapper {
 
-    private UserMapper userMapper;
-    private CourseMapper courseMapper;
-
     public EnrollmentResponse entityToResponse(Enrollment enrollment){
+        UserMapper userMapper = new UserMapper();
+        CourseMapper courseMapper = new CourseMapper();
         EnrollmentResponse response = EnrollmentResponse.builder()
                                   .id(enrollment.getId())  
-                                  .student(this.userMapper.entityToResponse(enrollment.getStudent_id()))
-                                  .course(this.courseMapper.entityToResponse(enrollment.getCourse_id()))
+                                  .student(userMapper.entityToResponse(enrollment.getStudent_id()))
+                                  .course(courseMapper.entityToResponse(enrollment.getCourse_id()))
                                   .build();
                                   
         return response;

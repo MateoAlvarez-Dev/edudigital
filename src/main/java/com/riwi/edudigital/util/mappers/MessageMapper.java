@@ -6,28 +6,18 @@ import com.riwi.edudigital.domain.entities.Course;
 import com.riwi.edudigital.domain.entities.Message;
 import com.riwi.edudigital.domain.entities.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class MessageMapper {
 
-    private UserMapper userMapper;
-    private CourseMapper courseMapper;
-
     public MessagesResponse entityToResponse(Message message){
+        UserMapper userMapper = new UserMapper();
+        CourseMapper courseMapper = new CourseMapper();
         MessagesResponse response = MessagesResponse.builder()
                                   .id(message.getId())
                                   .content(message.getContent())
                                   .date(message.getDate())
-                                  .sender(this.userMapper.entityToResponse(message.getSender()))
-                                  .receiver(this.userMapper.entityToResponse(message.getReceiver()))
-                                  .course(this.courseMapper.entityToResponse(message.getCourse_id()))
+                                  .sender(userMapper.entityToResponse(message.getSender()))
+                                  .receiver(userMapper.entityToResponse(message.getReceiver()))
+                                  .course(courseMapper.entityToResponse(message.getCourse_id()))
                                   .build();
                                   
         return response;

@@ -18,12 +18,10 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class SubmissionService implements ISubmissionService{
+public class SubmissionService extends SubmissionMapper implements ISubmissionService{
 
     @Autowired
     private final SubmissionRepository submissionRepository;
-
-    private final SubmissionMapper submissionMapper;
 
     @Override
     public Page<SubmissionResponse> getAll(int page, int size) {
@@ -31,14 +29,14 @@ public class SubmissionService implements ISubmissionService{
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.submissionRepository.findAll(pagination).map(submissionMapper::entityToResponse);
+        return this.submissionRepository.findAll(pagination).map(this::entityToResponse);
     }
 
     @Override
     public SubmissionResponse create(SubmissionRequest request) {
-        Submission submissionToSave = submissionMapper.requestToEntity(request);
+        Submission submissionToSave = this.requestToEntity(request);
         Submission submissionSaved = this.submissionRepository.save(submissionToSave);
-        SubmissionResponse response = submissionMapper.entityToResponse(submissionSaved);
+        SubmissionResponse response = this.entityToResponse(submissionSaved);
         return response;
     }
 
@@ -46,13 +44,13 @@ public class SubmissionService implements ISubmissionService{
     public SubmissionResponse update(Integer id, SubmissionRequest request) {
         this.findById(id);
 
-        Submission submissionToUpdate = submissionMapper.requestToEntity(request);
+        Submission submissionToUpdate = this.requestToEntity(request);
 
         submissionToUpdate.setId(id);
 
         this.submissionRepository.save(submissionToUpdate);
 
-        return submissionMapper.entityToResponse(submissionToUpdate);
+        return this.entityToResponse(submissionToUpdate);
     }
 
     @Override
@@ -64,7 +62,7 @@ public class SubmissionService implements ISubmissionService{
 
     @Override
     public SubmissionResponse getById(Integer id) {
-        return submissionMapper.entityToResponse(this.findById(id));
+        return this.entityToResponse(this.findById(id));
     }
     
     // Utils

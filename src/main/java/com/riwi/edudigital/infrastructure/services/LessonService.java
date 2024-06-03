@@ -20,15 +20,13 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class LessonService implements ILessonService {
+public class LessonService extends CourseMapper implements ILessonService {
     
     @Autowired
     private final LessonRepository lessonRepository;
 
     @Autowired
     private final CourseService courseService;
-
-    private final CourseMapper courseMapper;
 
     @Override
     public Page<LessonResponse> getAll(int page, int size) {
@@ -81,7 +79,7 @@ public class LessonService implements ILessonService {
     }
 
     private LessonResponse entityToResponse(Lesson lesson){
-        CourseResponse course = courseMapper.entityToResponse(lesson.getCourse_id());
+        CourseResponse course = this.entityToResponse(lesson.getCourse_id());
         LessonResponse response = LessonResponse.builder()
                                   .id(lesson.getId())
                                   .title(lesson.getTitle())

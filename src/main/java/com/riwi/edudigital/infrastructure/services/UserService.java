@@ -19,12 +19,10 @@ import lombok.AllArgsConstructor;
 @Service
 @Transactional
 @AllArgsConstructor
-public class UserService implements IUserService {
+public class UserService extends UserMapper implements IUserService {
 
     @Autowired
     private final UserRepository userRepository;
-
-    private final UserMapper userMapper;
 
     @Override
     public Page<UserResponse> getAll(int page, int size) {
@@ -32,14 +30,14 @@ public class UserService implements IUserService {
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.userRepository.findAll(pagination).map(userMapper::entityToResponse);
+        return this.userRepository.findAll(pagination).map(this::entityToResponse);
     }
 
     @Override
     public UserResponse create(UserRequest request) {
-        User userToSave = userMapper.requestToEntity(request);
+        User userToSave = this.requestToEntity(request);
         User userSaved = this.userRepository.save(userToSave);
-        UserResponse response = userMapper.entityToResponse(userSaved);
+        UserResponse response = this.entityToResponse(userSaved);
         return response;
     }
 
@@ -47,13 +45,13 @@ public class UserService implements IUserService {
     public UserResponse update(Integer id, UserRequest request) {
         this.findById(id);
 
-        User userToUpdate = userMapper.requestToEntity(request);
+        User userToUpdate = this.requestToEntity(request);
 
         userToUpdate.setId(id);
 
         this.userRepository.save(userToUpdate);
 
-        return userMapper.entityToResponse(userToUpdate);
+        return this.entityToResponse(userToUpdate);
     }
 
     @Override
@@ -65,11 +63,11 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse getById(Integer id) {
-        return userMapper.entityToResponse(this.findById(id));
+        return this.entityToResponse(this.findById(id));
     }
 
     public UserResponseFull getByIdFull(Integer id) {
-        return userMapper.entityToResponseFull(this.findById(id));
+        return this.entityToResponseFull(this.findById(id));
     }
 
     // Utils
