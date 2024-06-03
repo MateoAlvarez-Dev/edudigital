@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.riwi.edudigital.api.dto.errors.BaseErrorResponse;
+import com.riwi.edudigital.api.dto.errors.ErrorsResponse;
 import com.riwi.edudigital.util.exceptions.BadRequestException;
 
 @RestControllerAdvice
@@ -25,7 +27,7 @@ public class BadRequestController {
         exception.getAllErrors()
                 .forEach(error -> errors.add(error.getDefaultMessage()));
             
-        return ErrorsResp.builder()
+        return ErrorsResponse.builder()
                     .code(HttpStatus.BAD_REQUEST.value())
                     .status(HttpStatus.BAD_REQUEST.name())
                     .errors(errors)
@@ -38,7 +40,7 @@ public class BadRequestController {
 
         errors.add(exception.getMessage());
 
-        return ErrorsResp.builder()
+        return ErrorsResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .status(HttpStatus.BAD_REQUEST.name())
             .errors(errors)

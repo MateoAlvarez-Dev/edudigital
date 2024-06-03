@@ -1,4 +1,4 @@
-package com.riwi.edudigital.api.error_handler;
+package com.riwi.edudigital.api.dto.errors;
 
 import java.io.Serializable;
 

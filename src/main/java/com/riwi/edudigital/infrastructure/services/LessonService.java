@@ -12,6 +12,7 @@ import com.riwi.edudigital.domain.entities.Course;
 import com.riwi.edudigital.domain.entities.Lesson;
 import com.riwi.edudigital.domain.repositories.LessonRepository;
 import com.riwi.edudigital.infrastructure.abstract_services.ILessonService;
+import com.riwi.edudigital.util.mappers.CourseMapper;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,10 @@ public class LessonService implements ILessonService {
     @Autowired
     private final LessonRepository lessonRepository;
 
+    @Autowired
     private final CourseService courseService;
+
+    private final CourseMapper courseMapper;
 
     @Override
     public Page<LessonResponse> getAll(int page, int size) {
@@ -77,8 +81,7 @@ public class LessonService implements ILessonService {
     }
 
     private LessonResponse entityToResponse(Lesson lesson){
-        CourseResponse course = courseService.entityToResponse(lesson.getCourse_id());
-        System.out.println("\n\n\n\n ====== CURSO ->>> " + course.toString());
+        CourseResponse course = courseMapper.entityToResponse(lesson.getCourse_id());
         LessonResponse response = LessonResponse.builder()
                                   .id(lesson.getId())
                                   .title(lesson.getTitle())

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import com.riwi.edudigital.api.dto.request.CourseRequest;
 import com.riwi.edudigital.api.dto.response.CourseResponse;
 import com.riwi.edudigital.domain.entities.Course;
-import com.riwi.edudigital.domain.entities.User;
 import com.riwi.edudigital.domain.repositories.CourseRepository;
 import com.riwi.edudigital.infrastructure.abstract_services.ICourseService;
+import com.riwi.edudigital.util.mappers.CourseMapper;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class CourseService implements ICourseService{
     @Autowired
     private final CourseRepository courseRepository;
 
-    private final UserService userService;
+    private final CourseMapper courseMapper;
 
     @Override
     public Page<CourseResponse> getAll(int page, int size) {
@@ -31,14 +31,14 @@ public class CourseService implements ICourseService{
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.courseRepository.findAll(pagination).map(this::entityToResponse);
+        return this.courseRepository.findAll(pagination).map(courseMapper::entityToResponse);
     }
 
     @Override
     public CourseResponse create(CourseRequest request) {
-        Course courseToSave = this.requestToEntity(request);
+        Course courseToSave = courseMapper.requestToEntity(request);
         Course courseSaved = this.courseRepository.save(courseToSave);
-        CourseResponse response = this.entityToResponse(courseSaved);
+        CourseResponse response = courseMapper.entityToResponse(courseSaved);
         return response;
     }
 
@@ -46,13 +46,13 @@ public class CourseService implements ICourseService{
     public CourseResponse update(Integer id, CourseRequest request) {
         this.findById(id);
 
-        Course courseToUpdate = this.requestToEntity(request);
+        Course courseToUpdate = courseMapper.requestToEntity(request);
 
         courseToUpdate.setId(id);
 
         this.courseRepository.save(courseToUpdate);
 
-        return this.entityToResponse(courseToUpdate);
+        return courseMapper.entityToResponse(courseToUpdate);
     }
 
     @Override
@@ -64,36 +64,13 @@ public class CourseService implements ICourseService{
 
     @Override
     public CourseResponse getById(Integer id) {
-        return this.entityToResponse(this.findById(id));
+        return courseMapper.entityToResponse(this.findById(id));
     }
     
     // Utils
 
     public Course findById(Integer id){
         return this.courseRepository.findById(id).orElseThrow();
-    }
-
-    public CourseResponse entityToResponse(Course course){
-        CourseResponse response = CourseResponse.builder()
-                                  .id(course.getId())
-                                  .name(course.getName())
-                                  .description(course.getDescription())
-                                  .instructor(userService.entityToResponse(course.getInstructor_id()))
-                                  .build();
-                                  
-        return response;
-    }
-    
-    private Course requestToEntity(CourseRequest request){
-        User instructor = User.builder().id(request.getInstructor_id()).build();
-
-        Course course = Course.builder()
-                      .name(request.getName())
-                      .description(request.getDescription())
-                      .instructor_id(instructor)
-                      .build();
-
-        return course;
     }
 
 }

@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.riwi.edudigital.api.dto.request.UserRequest;
 import com.riwi.edudigital.api.dto.response.UserResponse;
+import com.riwi.edudigital.api.dto.response.UserResponseFull;
 import com.riwi.edudigital.domain.entities.User;
 import com.riwi.edudigital.domain.repositories.UserRepository;
 import com.riwi.edudigital.infrastructure.abstract_services.IUserService;
+import com.riwi.edudigital.util.mappers.UserMapper;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -22,20 +24,22 @@ public class UserService implements IUserService {
     @Autowired
     private final UserRepository userRepository;
 
+    private final UserMapper userMapper;
+
     @Override
     public Page<UserResponse> getAll(int page, int size) {
         if(page < 0) page = 0;
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.userRepository.findAll(pagination).map(this::entityToResponse);
+        return this.userRepository.findAll(pagination).map(userMapper::entityToResponse);
     }
 
     @Override
     public UserResponse create(UserRequest request) {
-        User userToSave = this.requestToEntity(request);
+        User userToSave = userMapper.requestToEntity(request);
         User userSaved = this.userRepository.save(userToSave);
-        UserResponse response = this.entityToResponse(userSaved);
+        UserResponse response = userMapper.entityToResponse(userSaved);
         return response;
     }
 
@@ -43,13 +47,13 @@ public class UserService implements IUserService {
     public UserResponse update(Integer id, UserRequest request) {
         this.findById(id);
 
-        User userToUpdate = this.requestToEntity(request);
+        User userToUpdate = userMapper.requestToEntity(request);
 
         userToUpdate.setId(id);
 
         this.userRepository.save(userToUpdate);
 
-        return this.entityToResponse(userToUpdate);
+        return userMapper.entityToResponse(userToUpdate);
     }
 
     @Override
@@ -61,35 +65,17 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse getById(Integer id) {
-        return this.entityToResponse(this.findById(id));
+        return userMapper.entityToResponse(this.findById(id));
+    }
+
+    public UserResponseFull getByIdFull(Integer id) {
+        return userMapper.entityToResponseFull(this.findById(id));
     }
 
     // Utils
-
-    private User findById(Integer id){
+    
+    public User findById(Integer id){
         return this.userRepository.findById(id).orElseThrow();
     }
 
-    public UserResponse entityToResponse(User user){
-        UserResponse response = UserResponse.builder()
-                                .id(user.getId())
-                                .username(user.getUsername())
-                                .email(user.getEmail())
-                                .full_name(user.getFull_name())
-                                .role(user.getRole())
-                                .build();
-        return response;
-    }
-    
-    private User requestToEntity(UserRequest request){
-        User user = User.builder()
-                    .username(request.getUsername())
-                    .password(request.getPassword())
-                    .email(request.getEmail())
-                    .full_name(request.getFull_name())
-                    .role(request.getRole())
-                    .build();
-        return user;
-    }
-    
 }

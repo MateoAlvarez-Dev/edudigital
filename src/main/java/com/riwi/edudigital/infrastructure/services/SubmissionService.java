@@ -7,11 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.riwi.edudigital.api.dto.request.SubmissionRequest;
 import com.riwi.edudigital.api.dto.response.SubmissionResponse;
-import com.riwi.edudigital.domain.entities.Assignment;
 import com.riwi.edudigital.domain.entities.Submission;
-import com.riwi.edudigital.domain.entities.User;
 import com.riwi.edudigital.domain.repositories.SubmissionRepository;
 import com.riwi.edudigital.infrastructure.abstract_services.ISubmissionService;
+import com.riwi.edudigital.util.mappers.SubmissionMapper;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -24,20 +23,22 @@ public class SubmissionService implements ISubmissionService{
     @Autowired
     private final SubmissionRepository submissionRepository;
 
+    private final SubmissionMapper submissionMapper;
+
     @Override
     public Page<SubmissionResponse> getAll(int page, int size) {
         if(page < 0) page = 0;
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        return this.submissionRepository.findAll(pagination).map(this::entityToResponse);
+        return this.submissionRepository.findAll(pagination).map(submissionMapper::entityToResponse);
     }
 
     @Override
     public SubmissionResponse create(SubmissionRequest request) {
-        Submission submissionToSave = this.requestToEntity(request);
+        Submission submissionToSave = submissionMapper.requestToEntity(request);
         Submission submissionSaved = this.submissionRepository.save(submissionToSave);
-        SubmissionResponse response = this.entityToResponse(submissionSaved);
+        SubmissionResponse response = submissionMapper.entityToResponse(submissionSaved);
         return response;
     }
 
@@ -45,13 +46,13 @@ public class SubmissionService implements ISubmissionService{
     public SubmissionResponse update(Integer id, SubmissionRequest request) {
         this.findById(id);
 
-        Submission submissionToUpdate = this.requestToEntity(request);
+        Submission submissionToUpdate = submissionMapper.requestToEntity(request);
 
         submissionToUpdate.setId(id);
 
         this.submissionRepository.save(submissionToUpdate);
 
-        return this.entityToResponse(submissionToUpdate);
+        return submissionMapper.entityToResponse(submissionToUpdate);
     }
 
     @Override
@@ -63,7 +64,7 @@ public class SubmissionService implements ISubmissionService{
 
     @Override
     public SubmissionResponse getById(Integer id) {
-        return this.entityToResponse(this.findById(id));
+        return submissionMapper.entityToResponse(this.findById(id));
     }
     
     // Utils
@@ -71,31 +72,4 @@ public class SubmissionService implements ISubmissionService{
     public Submission findById(Integer id){
         return this.submissionRepository.findById(id).orElseThrow();
     }
-
-    public SubmissionResponse entityToResponse(Submission submission){
-        SubmissionResponse response = SubmissionResponse.builder()
-                                  .id(submission.getId())
-                                  .content(submission.getContent())
-                                  .grade(submission.getGrade())
-                                  .user(submission.getUser_id())
-                                  .assignment(submission.getAssignment_id())
-                                  .build();
-                                  
-        return response;
-    }
-    
-    private Submission requestToEntity(SubmissionRequest submission){
-        User student = User.builder().id(submission.getUser_id()).build();
-        Assignment assignment = Assignment.builder().id(submission.getAssignment_id()).build();
-
-        Submission submissionEntity = Submission.builder()
-                        .content(submission.getContent())
-                        .grade(submission.getGrade())
-                        .user_id(student)
-                        .assignment_id(assignment)
-                        .build();
-
-        return submissionEntity;
-    }
-
 }

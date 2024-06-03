@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.riwi.edudigital.api.dto.request.UserRequest;
 import com.riwi.edudigital.api.dto.response.UserResponse;
+import com.riwi.edudigital.api.dto.response.UserResponseFull;
 import com.riwi.edudigital.infrastructure.abstract_services.IUserService;
 
 import lombok.AllArgsConstructor;
@@ -36,8 +37,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable int id) {
-        return ResponseEntity.ok(this.userService.getById(id));
+    public ResponseEntity<UserResponseFull> getUserById(@PathVariable int id) {
+        return ResponseEntity.ok(this.userService.getByIdFull(id));
     }
 
     @PostMapping

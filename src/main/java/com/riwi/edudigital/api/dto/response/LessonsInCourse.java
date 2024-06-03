@@ -11,20 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseResponseFull {
-
-    private int id;
-
-    private String name;
-
-    private String description;
-
-    private UserResponse instructor_id;
-
-    private List<EnrollmentResponse> enrollments;
-
+public class LessonsInCourse {
     private List<LessonResponse> lessons;
-
-    private List<MessagesResponse> messages;
-    
 }

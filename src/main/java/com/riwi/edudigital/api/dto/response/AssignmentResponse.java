@@ -2,8 +2,6 @@ package com.riwi.edudigital.api.dto.response;
 
 import java.util.Date;
 
-import com.riwi.edudigital.domain.entities.Lesson;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +21,6 @@ public class AssignmentResponse {
 
     private String content;
 
-    private Lesson lesson;
+    private LessonResponse lesson;
 
 }

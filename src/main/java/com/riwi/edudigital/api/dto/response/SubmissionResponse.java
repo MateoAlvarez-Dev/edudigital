@@ -1,8 +1,5 @@
 package com.riwi.edudigital.api.dto.response;
 
-import com.riwi.edudigital.domain.entities.Assignment;
-import com.riwi.edudigital.domain.entities.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +17,8 @@ public class SubmissionResponse {
 
     private Double grade;
 
-    private User user;
+    private UserResponse user;
 
-    private Assignment assignment;
+    private AssignmentResponse assignment;
 
 }

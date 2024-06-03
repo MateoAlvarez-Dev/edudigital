@@ -1,6 +1,6 @@
 package com.riwi.edudigital.api.dto.response;
 
-import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnrollmentResponse {
-
-    private int id;
-
-    private Date date;
-
-    private UserResponse student;
-
-    private CourseResponse course;
-
+public class AssignmentOnLesson {
+    private List<AssignmentResponse> assignments;
 }

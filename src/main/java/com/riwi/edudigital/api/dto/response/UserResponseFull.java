@@ -1,10 +1,6 @@
 package com.riwi.edudigital.api.dto.response;
 
 import java.util.List;
-
-import com.riwi.edudigital.domain.entities.Course;
-import com.riwi.edudigital.domain.entities.Enrollment;
-import com.riwi.edudigital.domain.entities.Submission;
 import com.riwi.edudigital.util.enums.RoleType;
 
 import lombok.AllArgsConstructor;
@@ -28,10 +24,10 @@ public class UserResponseFull {
 
     private RoleType role;
 
-    private List<Course> courses;
+    private List<CourseResponse> courses;
 
-    private List<Enrollment> enrollments;
+    private List<EnrollmentResponse> enrollments;
 
-    private List<Submission> submissions;
+    private List<SubmissionResponse> submissions;
 
 }

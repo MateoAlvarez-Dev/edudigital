@@ -2,9 +2,6 @@ package com.riwi.edudigital.api.dto.response;
 
 import java.util.Date;
 
-import com.riwi.edudigital.domain.entities.Course;
-import com.riwi.edudigital.domain.entities.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,10 +19,10 @@ public class MessagesResponse {
 
     private Date date;
 
-    private User sender;
+    private UserResponse sender;
 
-    private User receiver;
+    private UserResponse receiver;
 
-    private Course course;
+    private CourseResponse course;
 
 }

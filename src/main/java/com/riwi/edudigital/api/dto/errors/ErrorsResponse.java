@@ -1,4 +1,4 @@
-package com.riwi.edudigital.api.error_handler;
+package com.riwi.edudigital.api.dto.errors;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorsResp extends BaseErrorResponse {
+public class ErrorsResponse extends BaseErrorResponse {
     private List<String> errors;    
 }
