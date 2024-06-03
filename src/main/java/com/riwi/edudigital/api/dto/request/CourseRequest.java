@@ -1,6 +1,7 @@
 package com.riwi.edudigital.api.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class CourseRequest {
     @NotBlank(message = "The description is required")
     private String description;
 
-    @NotBlank(message = "The intructor id is required")
+    @NotNull(message = "The intructor id is required")
     private int instructor_id;
     
 }

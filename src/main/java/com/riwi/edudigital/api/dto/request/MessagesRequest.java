@@ -1,7 +1,5 @@
 package com.riwi.edudigital.api.dto.request;
 
-import java.util.Date;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,24 +7,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssignmentRequest {
-
-    private int id;
-
-    @NotBlank(message = "The title is required")
-    private String title;
-
-    @NotBlank(message = "The due date is required")
-    private Date due_date;
+public class MessagesRequest {
 
     @NotBlank(message = "The content is required")
     private String content;
 
-    @NotNull(message = "The lession id is required")
-    private int lession_id;
+    @NotNull(message = "The sender id is required")
+    private int sender_id;
+
+    @NotNull(message = "The receiver id is required")
+    private int receiver_id;
+
+    @NotNull(message = "The course id is required")
+    private int course_id;
 
 }
