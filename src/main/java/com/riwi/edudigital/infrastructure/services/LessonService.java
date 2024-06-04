@@ -1,13 +1,19 @@
 package com.riwi.edudigital.infrastructure.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.edudigital.api.dto.request.LessonRequest;
+import com.riwi.edudigital.api.dto.response.AssignmentResponseNoLesson;
+import com.riwi.edudigital.api.dto.response.AssignmentsInLesson;
 import com.riwi.edudigital.api.dto.response.CourseResponse;
 import com.riwi.edudigital.api.dto.response.LessonResponse;
+import com.riwi.edudigital.domain.entities.Assignment;
 import com.riwi.edudigital.domain.entities.Course;
 import com.riwi.edudigital.domain.entities.Lesson;
 import com.riwi.edudigital.domain.repositories.LessonRepository;
@@ -70,7 +76,10 @@ public class LessonService extends CourseMapper implements ILessonService {
         return this.entityToResponse(this.findById(id));
     }
 
-
+    @Override
+    public AssignmentsInLesson getAssignmentsOfLesson(Integer id) {
+        return this.LessonToAssignments(this.findById(id));
+    }
 
     // Utils
 
@@ -100,6 +109,29 @@ public class LessonService extends CourseMapper implements ILessonService {
                         .build();
 
         return lesson;
+    }
+
+    public AssignmentsInLesson LessonToAssignments(Lesson lesson){
+        AssignmentsInLesson assignments = AssignmentsInLesson.builder()
+                                  .assignments(this.assignmentsToAssignmentResponseNoLesson(lesson.getAssignments()))
+                                  .build();
+        return assignments;
+    }
+
+    public List<AssignmentResponseNoLesson> assignmentsToAssignmentResponseNoLesson(List<Assignment> assignments){
+        List<AssignmentResponseNoLesson> newAssignments = new ArrayList<>();
+
+        for(Assignment assignment : assignments){
+            AssignmentResponseNoLesson assignmentResponse = AssignmentResponseNoLesson.builder()
+                                                    .id(assignment.getId())
+                                                    .title(assignment.getTitle())
+                                                    .due_date(assignment.getDue_date())
+                                                    .content(assignment.getContent())
+                                                    .build();
+                                                    newAssignments.add(assignmentResponse);
+        }
+
+        return newAssignments;
     }
 
     

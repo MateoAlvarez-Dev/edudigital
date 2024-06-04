@@ -7,10 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssignmentOnLesson {
-    private List<AssignmentResponse> assignments;
+public class AssignmentsInLesson {
+    List<AssignmentResponseNoLesson> assignments;
 }

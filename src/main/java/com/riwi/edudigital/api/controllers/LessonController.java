@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.riwi.edudigital.api.dto.request.LessonRequest;
+import com.riwi.edudigital.api.dto.response.AssignmentsInLesson;
 import com.riwi.edudigital.api.dto.response.LessonResponse;
 import com.riwi.edudigital.infrastructure.abstract_services.ILessonService;
 
@@ -36,6 +37,11 @@ public class LessonController {
     @GetMapping("/{id}")
     public ResponseEntity<LessonResponse> getById(@PathVariable int id) {
         return ResponseEntity.ok(this.lessonService.getById(id));
+    }
+
+    @GetMapping("/{id}/assignments")
+    public ResponseEntity<AssignmentsInLesson> getAssignmentsById(@PathVariable int id) {
+        return ResponseEntity.ok(this.lessonService.getAssignmentsOfLesson(id));
     }
 
     @PostMapping

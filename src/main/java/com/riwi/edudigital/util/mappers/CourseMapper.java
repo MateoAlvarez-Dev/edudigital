@@ -1,8 +1,14 @@
 package com.riwi.edudigital.util.mappers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.riwi.edudigital.api.dto.request.CourseRequest;
 import com.riwi.edudigital.api.dto.response.CourseResponse;
+import com.riwi.edudigital.api.dto.response.LessonResponseNoCourse;
+import com.riwi.edudigital.api.dto.response.LessonsInCourse;
 import com.riwi.edudigital.domain.entities.Course;
+import com.riwi.edudigital.domain.entities.Lesson;
 import com.riwi.edudigital.domain.entities.User;
 
 public class CourseMapper {
@@ -17,6 +23,28 @@ public class CourseMapper {
                                   .build();
                                   
         return response;
+    }
+
+    public LessonsInCourse courseToLessons(Course course){
+        LessonsInCourse lessons = LessonsInCourse.builder()
+                                  .lessons(this.lessonsToLessonResponseNoCourses(course.getLessons()))
+                                  .build();
+        return lessons;
+    }
+
+    public List<LessonResponseNoCourse> lessonsToLessonResponseNoCourses(List<Lesson> lessons){
+        List<LessonResponseNoCourse> newLessons = new ArrayList<>();
+
+        for(Lesson lesson : lessons){
+            LessonResponseNoCourse lessonResponse = LessonResponseNoCourse.builder()
+                                                    .id(lesson.getId())
+                                                    .title(lesson.getTitle())
+                                                    .content(lesson.getContent())
+                                                    .build();
+            newLessons.add(lessonResponse);
+        }
+
+        return newLessons;
     }
     
     public Course requestToEntity(CourseRequest request){

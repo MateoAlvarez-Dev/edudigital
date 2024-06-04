@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.riwi.edudigital.api.dto.request.CourseRequest;
 import com.riwi.edudigital.api.dto.response.CourseResponse;
+import com.riwi.edudigital.api.dto.response.LessonsInCourse;
 import com.riwi.edudigital.infrastructure.abstract_services.ICourseService;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +37,11 @@ public class CourseController {
     @GetMapping("/{id}")
     public ResponseEntity<CourseResponse> getById(@PathVariable int id) {
         return ResponseEntity.ok(this.courseService.getById(id));
+    }
+
+    @GetMapping("/{id}/lessons")
+    public ResponseEntity<LessonsInCourse> getAllLessons(@PathVariable int id) {
+        return ResponseEntity.ok(this.courseService.getLessonsOfCourse(id));
     }
 
     @PostMapping

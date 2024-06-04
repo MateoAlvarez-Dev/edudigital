@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.riwi.edudigital.api.dto.request.CourseRequest;
 import com.riwi.edudigital.api.dto.response.CourseResponse;
+import com.riwi.edudigital.api.dto.response.LessonsInCourse;
 import com.riwi.edudigital.domain.entities.Course;
 import com.riwi.edudigital.domain.repositories.CourseRepository;
 import com.riwi.edudigital.infrastructure.abstract_services.ICourseService;
@@ -63,6 +64,11 @@ public class CourseService extends CourseMapper implements ICourseService{
     @Override
     public CourseResponse getById(Integer id) {
         return this.entityToResponse(this.findById(id));
+    }
+
+    @Override
+    public LessonsInCourse getLessonsOfCourse(Integer id) {
+        return this.courseToLessons(this.findById(id));
     }
     
     // Utils

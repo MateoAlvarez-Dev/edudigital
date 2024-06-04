@@ -1,7 +1,5 @@
 package com.riwi.edudigital.api.dto.response;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LessonsInCourse {
-    private List<LessonResponseNoCourse> lessons;
+public class LessonResponseNoCourse {
+    private int id;
+
+    private String title;
+
+    private String content;
 }

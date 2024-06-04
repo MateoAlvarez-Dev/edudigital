@@ -1,16 +1,24 @@
 package com.riwi.edudigital.api.dto.response;
 
-import java.util.List;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LessonsInCourse {
-    private List<LessonResponseNoCourse> lessons;
+public class AssignmentResponseNoLesson {
+
+    private int id;
+
+    private String title;
+
+    private Date due_date;
+
+    private String content;
+
 }
